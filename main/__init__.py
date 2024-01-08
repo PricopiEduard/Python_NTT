@@ -1,7 +1,9 @@
-log_file = 'output.txt'
-logs = 'output.txt'
+import re, unittest
 
-import re
+log_file = 'sampleFile.txt'
+logs = 'sampleFile.txt'
+
+
 
 def count_logs(log_file):
     counts = {'INFO': 0, 'DEBUG': 0, 'ERROR': 0}
@@ -55,6 +57,7 @@ def calculate_average_run_time(log_file):
 
     return run_times
 
+
 def most_failed_runs(log_file):
     apps_counter = {'FrontendApp' : 0, 'BackendApp' : 0,'API' : 0, 'SYSTEM' : 0}
 
@@ -65,7 +68,8 @@ def most_failed_runs(log_file):
                 aux = strings[2].split()
                 apps_counter[aux[0]] +=1
     app = max(apps_counter, key=apps_counter.get)
-    return f'App with the most failed runs is {app} with {apps_counter[app]}'
+    print(f'App with the most failed runs is {app} with {apps_counter[app]}')
+    return app, apps_counter[app]
 
 def most_succesful_runs(log_file):
     apps_counter = {'FrontendApp' : 0, 'BackendApp' : 0,'API' : 0, 'SYSTEM' : 0}
@@ -81,7 +85,8 @@ def most_succesful_runs(log_file):
                     aux = strings[2].split()
                     apps_counter[aux[0]] +=1
         app = max(apps_counter, key=apps_counter.get)
-    return f'App with the most succesful runs is {app} with {apps_counter[app]}'
+        print(f'App with the most succesful runs is {app} with {apps_counter[app]}')
+        return app, apps_counter[app]
 
 def errors_app_daily(log_file):
 
@@ -98,14 +103,15 @@ def errors_app_daily(log_file):
 
             time_list = strings[0].split(':')
             ceck = False
-            if int(time_list[0]) < int(current_time[0]):
+            if int(time_list[0]) > int(current_time[0]):
                 ceck = True
-            elif int(time_list[1]) < int(current_time[1]):
+            elif int(time_list[1]) > int(current_time[1]):
                 ceck = True
-            elif int(time_list[2]) < int(current_time[2]):
+            elif int(time_list[2]) > int(current_time[2]):
                 ceck = True
 
             if ceck:
+
                 print(f"Day {day} "
                       f"FrontendApp ={apps_counter['FrontendApp']} "
                       f"BackendApp ={apps_counter['BackendApp']} "
@@ -117,6 +123,8 @@ def errors_app_daily(log_file):
                 apps_counter['API'] = 0
                 apps_counter['SYSTEM'] = 0
             current_time = [time_list[0],time_list[1],time_list[2]]
+        return day
+
 
 def count_errors_by_third_of_day(log_file):
     third_of_day = {'00:00:00 - 07:59:59': 0, '08:00:00 - 15:59:59': 0, '16:00:00 - 23:59:59': 0}
@@ -206,7 +214,7 @@ print("Ex_3:")
 errors_app_daily(log_file)
 
 print("Ex_4:")
-print(f"{most_failed_runs(log_file)}")
+most_failed_runs(log_file)
 
 print("Ex_5:")
 print(f"{most_succesful_runs(log_file)}")
